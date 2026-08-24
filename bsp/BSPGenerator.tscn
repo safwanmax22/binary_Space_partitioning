@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://cw022uajrjxn5"]
+
+[ext_resource type="Script" uid="uid://c14f4ot7ci8dk" path="res://bsp/bsp_generator.gd" id="1_u6e41"]
+
+[node name="BSPGenerator" type="Node" unique_id=105697481]
+script = ExtResource("1_u6e41")

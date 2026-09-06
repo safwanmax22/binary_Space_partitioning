@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://k4o4s8hxum04"]
+
+[ext_resource type="Script" uid="uid://dgnavwkbmf8pr" path="res://dealanay_triangulation/delaunay_triangulation.gd" id="1_2sy35"]
+
+[node name="DelaunayTriangulation" type="Node" unique_id=1751339052]
+script = ExtResource("1_2sy35")

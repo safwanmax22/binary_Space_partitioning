@@ -99,8 +99,32 @@ func get_super_triangle(points: Array[Node2D]) -> Triangle:
 		Vector2(x_midpoint + boundary_size.x, highest_y)
 	]
 	
-	return Triangle.new()
+	return super_triangle #Triangle.new()
 
 
 func _is_delaunay_triangle(point: Vector2, triangle: Triangle) -> bool:
-	return true
+	var circum_circle := _calc_circum_circle(triangle)
+	
+	return point.distance_to(circum_circle.position) > circum_circle.raidus
+
+
+func _calc_circum_circle(triangle: Triangle) -> Circle:
+	var circle: = Circle.new() as Circle
+	
+	triangle.points.sort_custom(func (_a: Vector2, _b: Vector2):
+		return _a.x < _b.x)
+	
+	var offset := triangle.points[0]
+	var a: Vector2 = triangle.points[0] - offset
+	var b: Vector2 = triangle.points[1] - offset
+	var c: Vector2 = triangle.points[2] - offset
+	
+	circle.position.x = (c.y*(b.x*b.x + b.y*b.y) - b.y*(c.x*c.x + c.y*c.y))
+	circle.position.x /= 2 * (b.x*c.y - b.y*c.x)
+	circle.position.y = (b.x*(c.x*c.x + c.y*c.y) - c.x*(b.x*b.x + b.y*b.y))/(2 * (b.x*c.y - b.y*c.x))
+	
+	circle.raidus = a.distance_to(circle.position)
+	
+	circle.position += offset
+	return circle
+	

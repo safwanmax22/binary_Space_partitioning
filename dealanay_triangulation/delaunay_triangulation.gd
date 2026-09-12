@@ -1,18 +1,35 @@
 class_name DelaunayTriangulation extends Node
 
+signal point_added(point: Vector2)
+signal circle_drawn(circle: Circle)
+signal new_triangles_drawn(triangle: Array[Triangle])
+signal next()
+
 const TRIANGULATION_EDGE = preload("uid://bix18ev8roj4q")
+
+
+func next_step():
+	next.emit()
 
 
 func triangulate(points: Array[Node2D]) -> Array[Triangle]:
 	var triangles: Array[Triangle] = [get_super_triangle(points)]
 	
 	for point in points:
+		new_triangles_drawn.emit(triangles)
+		await next
+		
 		var adding_point: Vector2 = point.position
+		
+		point_added.emit(adding_point)
+		await next
+		
 		var bad_triangles: Array[Triangle] = []
 		var updated_triangles: Array[Triangle] = []
+		
 		# check if the new point is making any of the triangle fail Delaunay triangulation
 		for triangle in triangles:
-			if !_is_delaunay_triangle(adding_point, triangle):
+			if await _is_delaunay_triangle(adding_point, triangle):
 				updated_triangles.push_back(triangle)
 			else:
 				bad_triangles.push_back(triangle)
@@ -105,6 +122,8 @@ func get_super_triangle(points: Array[Node2D]) -> Triangle:
 func _is_delaunay_triangle(point: Vector2, triangle: Triangle) -> bool:
 	var circum_circle := _calc_circum_circle(triangle)
 	
+	circle_drawn.emit(circum_circle)
+	await next
 	return point.distance_to(circum_circle.position) > circum_circle.raidus
 
 

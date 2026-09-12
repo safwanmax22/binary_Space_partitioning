@@ -7,3 +7,6 @@
 script = ExtResource("1_mgocy")
 
 [node name="DelaunayTriangulation" parent="." unique_id=1751339052 instance=ExtResource("2_i48m6")]
+
+[connection signal="circle_drawn" from="DelaunayTriangulation" to="." method="_on_delaunay_triangulation_circle_drawn"]
+[connection signal="point_added" from="DelaunayTriangulation" to="." method="_on_delaunay_triangulation_point_added"]
